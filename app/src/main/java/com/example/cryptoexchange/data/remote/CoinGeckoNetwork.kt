@@ -10,7 +10,7 @@ object CoinGeckoNetwork {
     private const val BASE_URL = "https://api.coingecko.com/api/v3/"
     private const val API_KEY_HEADER = "x-cg-demo-api-key"
 
-    // "Охоронець": до КОЖНОГО запиту додає заголовок з ключем.
+
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->
             val builder = chain.request().newBuilder()
@@ -22,7 +22,6 @@ object CoinGeckoNetwork {
         }
         .build()
 
-    // by lazy: Retrofit створиться лише при першому зверненні і лише один раз.
     val api: CoinGeckoApi by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)

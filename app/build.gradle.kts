@@ -1,6 +1,7 @@
 import java.util.Properties
 
 plugins {
+    id("com.google.devtools.ksp")
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
@@ -49,6 +50,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room3:room3-runtime:3.0.3")
+    ksp("androidx.room3:room3-compiler:3.0.3")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     implementation(platform(libs.androidx.compose.bom))

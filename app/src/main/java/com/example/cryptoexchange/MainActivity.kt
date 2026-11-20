@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     Log.w("CoinGecko", "Помилка сервера: код ${response.code()}")
                 }
             } catch (e: CancellationException) {
-                throw e                       // скасування не ковтаємо (пам'ятаєш з корутин?)
+                throw e
             } catch (e: Exception) {
                 Log.w("CoinGecko", "Не вдалося: ${e.message}")
             }

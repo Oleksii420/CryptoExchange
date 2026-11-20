@@ -11,9 +11,9 @@ interface CoinGeckoApi {
     @GET("coins/markets")
     suspend fun getTopCoins(
         @Query("vs_currency") currency: String = "usd",
-        @Query("order") order: String = "market_cap_desc",   // за капіталізацією, від більшої
-        @Query("per_page") perPage: Int = 30,                // топ-30
+        @Query("order") order: String = "market_cap_desc",
+        @Query("per_page") perPage: Int = 30,
         @Query("page") page: Int = 1,
-        @Query("precision") precision: String = "full"       // ціна без обрізання знаків
+        @Query("precision") precision: String = "full"
     ): Response<List<CoinMarketDto>>
 }
