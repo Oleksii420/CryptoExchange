@@ -13,29 +13,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import com.example.cryptoexchange.data.remote.CoinGeckoNetwork
 import com.example.cryptoexchange.ui.theme.CryptoExchangeTheme
 import kotlinx.coroutines.launch
-import kotlin.coroutines.cancellation.CancellationException
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val container = (application as CryptoApp).container
+
         lifecycleScope.launch {
-            try {
-                val response = CoinGeckoNetwork.api.getTopCoins()
-                if (response.isSuccessful) {
-                    val coins = response.body().orEmpty()
-                    val first = coins.firstOrNull()
-                    Log.d("CoinGecko", "Отримано ${coins.size} монет, перша: ${first?.name} = ${first?.currentPrice} USD")
-                } else {
-                    Log.w("CoinGecko", "Помилка сервера: код ${response.code()}")
-                }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                Log.w("CoinGecko", "Не вдалося: ${e.message}")
+            container.observeCryptos().collect { list ->
+                Log.d("CryptoRepo", "У базі ${list.size} монет, перша: ${list.firstOrNull()?.name}")
             }
+        }
+
+        lifecycleScope.launch {
+            val result = container.refreshCryptos()
+            Log.d("CryptoRepo", "Результат оновлення: $result")
         }
         enableEdgeToEdge()
         setContent {
