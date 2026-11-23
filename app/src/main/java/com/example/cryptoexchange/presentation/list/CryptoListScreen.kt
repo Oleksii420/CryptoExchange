@@ -31,13 +31,19 @@ import com.example.cryptoexchange.presentation.format.rangePosition
 import com.example.cryptoexchange.sync.SyncStatus
 import com.example.cryptoexchange.ui.theme.CryptoExchangeTheme
 import com.example.cryptoexchange.ui.theme.extraColors
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.ui.graphics.Color
 
-// Головна функція екрана: отримує ГОТОВИЙ стан і показує його
 @Composable
 fun CryptoListScreen(
     state: CryptoListUiState,
     onRefresh: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCryptoClick: (String) -> Unit = {},
+    selectedId: String? = null,
+    listState: LazyListState = rememberLazyListState()
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         ListHeader(
@@ -56,10 +62,15 @@ fun CryptoListScreen(
             )
             else -> LazyColumn(
                 modifier = Modifier.fillMaxSize(),
+                state = listState,
                 contentPadding = PaddingValues(horizontal = 12.dp)
             ) {
                 items(items = state.cryptos, key = { it.id }) { crypto ->
-                    CryptoRow(crypto)
+                    CryptoRow(
+                        crypto = crypto,
+                        selected = crypto.id == selectedId,
+                        onClick = { onCryptoClick(crypto.id) }
+                    )
                 }
                 item { DataAttribution() }
             }
@@ -161,14 +172,15 @@ private fun StatusPill(kind: PillKind, text: String, showSpinner: Boolean = fals
 // ---------- Один рядок списку ----------
 
 @Composable
-private fun CryptoRow(crypto: Crypto) {
+private fun CryptoRow(crypto: Crypto, selected: Boolean, onClick: () -> Unit) {
     val muted = MaterialTheme.colorScheme.onSurfaceVariant
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(if (selected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
+            .clickable(onClickLabel = "Відкрити деталі", onClick = onClick)
             .padding(horizontal = 8.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             text = crypto.rank?.toString() ?: "—",

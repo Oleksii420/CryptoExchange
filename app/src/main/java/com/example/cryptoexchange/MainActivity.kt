@@ -5,13 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.cryptoexchange.presentation.list.CryptoListScreen
+import com.example.cryptoexchange.presentation.MainScreen
 import com.example.cryptoexchange.presentation.list.CryptoListViewModel
 import com.example.cryptoexchange.ui.theme.CryptoExchangeTheme
 
@@ -24,13 +24,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CryptoExchangeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val state by viewModel.uiState.collectAsStateWithLifecycle()
-                    CryptoListScreen(
-                        state = state,
-                        onRefresh = viewModel::refresh,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    contentWindowInsets = WindowInsets.safeDrawing
+                ) { innerPadding ->
+                    MainScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding))
                 }
             }
         }

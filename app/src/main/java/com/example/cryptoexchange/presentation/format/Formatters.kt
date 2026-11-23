@@ -26,7 +26,6 @@ fun formatPrice(price: Double?): String? {
     return "\$$text"
 }
 
-// 18:41
 fun formatTime(millis: Long?): String? =
     millis?.let { SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(it)) }
 
@@ -42,7 +41,6 @@ fun formatSyncTime(millis: Long): String {
     return SimpleDateFormat(pattern, Locale.getDefault()).format(Date(millis))
 }
 
-//ціна між мінімумом і максимумом: 0 = на мінімумі, 1 = на максимумі
 fun rangePosition(price: Double?, low: Double?, high: Double?): Float? {
     if (price == null || low == null || high == null || high <= low) return null
     return ((price - low) / (high - low)).toFloat().coerceIn(0f, 1f)
